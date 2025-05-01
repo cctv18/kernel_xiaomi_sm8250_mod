@@ -393,6 +393,10 @@ jobs:
             --set-val PRIME_CPU_MASK 128 \
             -e LRU_GEN \
             -e LRU_GEN_ENABLED
+          if [ "$LXC_ENABLE" == "enable" ]; then
+              scripts/config --file out/.config \
+                  -e ZSTD_LEGACY \
+          fi
             
           # 根据系统类型修改配置
           if [ "$SYSTEM" == "MIUI" ]; then
