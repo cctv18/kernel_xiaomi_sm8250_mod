@@ -11,7 +11,7 @@ on:
         required: true
         type: choice
         options:
-          - 'umi'
+          - 'lmi'
           - 'cmi'
           - 'cas'
           - 'thyme'
@@ -21,7 +21,7 @@ on:
           - 'enuma'
           - 'alioth'
           - 'apollo'
-          - 'lmi'
+          - 'umi'
           - 'psyche'
           - 'pipa'
           - 'all'
