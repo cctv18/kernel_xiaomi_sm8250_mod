@@ -232,15 +232,6 @@ jobs:
             echo 'source "utils/Kconfig"' >> "Kconfig"
             
             echo "CONFIG_DOCKER=y" >> arch/arm64/configs/${DEVICE}_defconfig
-
-            sed -i '/CONFIG_NET/d' arch/arm64/configs/${DEVICE}_defconfig
-            echo "CONFIG_NET=y" >> arch/arm64/configs/${DEVICE}_defconfig
-
-            sed -i '/CONFIG_BRIDGE/d' arch/arm64/configs/${DEVICE}_defconfig
-            echo "CONFIG_BRIDGE=y" >> arch/arm64/configs/${DEVICE}_defconfig
-
-            sed -i '/CONFIG_VLAN_8021Q/d' arch/arm64/configs/${DEVICE}_defconfig
-            echo "CONFIG_VLAN_8021Q=y" >> arch/arm64/configs/${DEVICE}_defconfig
             
             sed -i '/CONFIG_ANDROID_PARANOID_NETWORK/d' arch/arm64/configs/${DEVICE}_defconfig
             echo "# CONFIG_ANDROID_PARANOID_NETWORK is not set" >> arch/arm64/configs/${DEVICE}_defconfig
