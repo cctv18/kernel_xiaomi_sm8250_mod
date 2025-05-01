@@ -228,7 +228,7 @@ jobs:
             
             cd $KERNEL_SOURCE
             rm -rf utils
-            git clone https://github.com/tomxi1997/lxc-docker-support-for-android.git utils
+            git clone https://github.com/cctv18/lxc-docker-support-for-android.git utils
             echo 'source "utils/Kconfig"' >> "Kconfig"
             
             echo "CONFIG_DOCKER=y" >> arch/arm64/configs/${DEVICE}_defconfig
