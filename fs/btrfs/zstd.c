@@ -14,7 +14,7 @@
 #include <linux/refcount.h>
 #include <linux/sched.h>
 #include <linux/slab.h>
-#include <linux/zstd.h>
+#include "zstd_old.h"
 #include "compression.h"
 
 #define ZSTD_BTRFS_MAX_WINDOWLOG 17
