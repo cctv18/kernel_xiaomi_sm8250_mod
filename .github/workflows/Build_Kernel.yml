@@ -51,6 +51,14 @@ on:
         options:
           - 'enable'
           - 'disable'
+      lxc_enable:
+        description: 'Is LXC support enabled? (是否启用 LXC 支持?)'
+        required: true
+        type: choice
+        default: 'enable'
+        options:
+          - 'enable'
+          - 'disable'
       kernel_version:
         description: 'Customizing the kernel version number (自定义内核版本号)'
         required: false
@@ -147,7 +155,7 @@ jobs:
       - name: 📥 Cloning kernel source code （克隆内核源码）
         run: |
           echo "正在克隆内核源码..."
-          git clone https://github.com/yspbwx2010/kernel_xiaomi_sm8250_mod.git --depth=1 $KERNEL_SOURCE
+          git clone https://github.com/cctv18/kernel_xiaomi_sm8250_mod.git --depth=1 $KERNEL_SOURCE
           echo "✅ Kernel source code cloning complete (内核源码克隆完成)"
 
       - name: 📥 Caching toolchain (缓存工具链)
@@ -211,6 +219,49 @@ jobs:
           fi
           
           echo "✅ KernelSU configuration complete (KernelSU 配置完成)"
+
+      - name: 🛠️ Setup LXC (安装 LXC 补丁)
+        run: |
+          LXC_ENABLE="${{ github.event.inputs.lxc_enable }}"
+          if [ "$LXC_ENABLE" == "enable" ]; then
+            echo "🛠️ 正在为内核安装 LXC 补丁..."
+            
+            cd $KERNEL_SOURCE
+            rm -rf utils
+            git clone https://github.com/tomxi1997/lxc-docker-support-for-android.git utils
+            echo 'source "utils/Kconfig"' >> "Kconfig"
+            
+            echo "CONFIG_DOCKER=y" >> arch/arm64/configs/${DEVICE}_defconfig
+
+            sed -i '/CONFIG_NET/d' arch/arm64/configs/${DEVICE}_defconfig
+            echo "CONFIG_NET=y" >> arch/arm64/configs/${DEVICE}_defconfig
+
+            sed -i '/CONFIG_BRIDGE/d' arch/arm64/configs/${DEVICE}_defconfig
+            echo "CONFIG_BRIDGE=y" >> arch/arm64/configs/${DEVICE}_defconfig
+
+            sed -i '/CONFIG_VLAN_8021Q/d' arch/arm64/configs/${DEVICE}_defconfig
+            echo "CONFIG_VLAN_8021Q=y" >> arch/arm64/configs/${DEVICE}_defconfig
+            
+            sed -i '/CONFIG_ANDROID_PARANOID_NETWORK/d' arch/arm64/configs/${DEVICE}_defconfig
+            echo "# CONFIG_ANDROID_PARANOID_NETWORK is not set" >> arch/arm64/configs/${DEVICE}_defconfig
+            
+            #sed -i '/CONFIG_LOCALVERSION/d' arch/arm64/configs/${DEVICE}_defconfig
+            #echo 'CONFIG_LOCALVERSION="-LXC-KernelSU-support_Pdx"' >> arch/arm64/configs/${DEVICE}_defconfig
+            
+            chmod +x $KERNEL_SOURCE/utils/runcpatch.sh
+            if [ -f $KERNEL_SOURCE/kernel/cgroup/cgroup.c ]; then
+                sh $KERNEL_SOURCE/utils/runcpatch.sh $KERNEL_SOURCE/kernel/cgroup/cgroup.c
+            fi
+            if [ -f $KERNEL_SOURCE/kernel/cgroup.c ]; then
+                sh $KERNEL_SOURCE/utils/runcpatch.sh $KERNEL_SOURCE/kernel/cgroup.c
+            fi
+            if [ -f $KERNEL_SOURCE/net/netfilter/xt_qtaguid.c ]; then
+                patch -p0 < $KERNEL_SOURCE/utils/xt_qtaguid.patch
+            fi
+            
+          else 
+            echo "ℹ️ LXC is not enabled. (LXC 未启用)"
+          fi
           
       - name: 🔨 Build the kernel (构建内核)
         run: |
@@ -584,6 +635,7 @@ jobs:
           - **Compiled System:** ${{ github.event.inputs.compiled_system }}
           - **KernelSU Variant:** ${{ github.event.inputs.kernelsu_variant }}
           - **KPM Support:** ${{ github.event.inputs.kpm_enable }}
+          - **LXC Support:** ${{ github.event.inputs.lxc_enable }}
           - **Build Type:** ${{ github.event.inputs.build_type }}
           - **Build Date:** ${{ env.RELEASE_DATE }}
           - **Commit ID:** ${{ env.GIT_COMMIT_ID }}
@@ -593,6 +645,7 @@ jobs:
           - **适用系统:** ${{ github.event.inputs.compiled_system }}
           - **KernelSU变体:** ${{ github.event.inputs.kernelsu_variant }}
           - **KPM支持:** ${{ github.event.inputs.kpm_enable }}
+          - **LXC支持:** ${{ github.event.inputs.lxc_enable }}
           - **构建类型:** ${{ github.event.inputs.build_type }}
           - **构建日期:** ${{ env.RELEASE_DATE }}
           - **提交ID:** ${{ env.GIT_COMMIT_ID }}
