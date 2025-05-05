@@ -383,7 +383,54 @@ jobs:
             --set-val BIG_CPU_MASK 112 \
             --set-val PRIME_CPU_MASK 128 \
             -e LRU_GEN \
-            -e LRU_GEN_ENABLED
+            -e LRU_GEN_ENABLED \
+            -e NTFS_FS \
+            -e NTFS_RW \
+            -e NTFS_DEBUG \
+            -e NFS_FS \
+            -e ROOT_NFS \
+            -e NFS_FSCACHE \
+            -e NFS_V2 \
+            -e NFS_V3 \
+            -e NFS_V3_ACL \
+            -e NFS_V4 \
+            -e NFS_V4_1 \
+            -e NFS_V4_2 \
+            -e PNFS_FILE_LAYOUT \
+            -e PNFS_BLOCK \
+            -e PNFS_FLEXFILE_LAYOUT \
+            -e CIFS \
+            -e CIFS_XATTR\
+            -e CIFS_ACL \
+            -e CIFS_UPCALL \
+            -e CIFS_DFS_UPCALL \
+            -e CIFS_FSCACHE \
+            -e CIFS_SMB_DIRECT \
+            -e EROFS_FS \
+            -e EROFS_FS_XATTR \
+            -e EROFS_FS_ZIP \
+            -e ISO9660_FS \
+            -e CONFIG_JOLIET \
+            -e CONFIG_ZISOFS \
+            -e UDF_FS \
+            -e SQUASHFS \
+            -e SQUASHFS_FILE_CACHE \
+            -e SQUASHFS_FILE_DIRECT \
+            -e SQUASHFS_DECOMP_SINGLE \
+            -e SQUASHFS_DECOMP_MULTI \
+            -e SQUASHFS_DECOMP_MULTI_PERCPU \
+            -e SQUASHFS_XATTR \
+            -e SQUASHFS_LZ4 \
+            -e SQUASHFS_LZO \
+            -e SQUASHFS_XZ \
+            -e SQUASHFS_ZLIB \
+            -e SQUASHFS_ZSTD \
+            -e EXFAT_FS \
+            -e NLS_ASCII \
+            -e NLS_UTF8 \
+            -e UNICODE
+            
+            
             
           # 根据系统类型修改配置
           if [ "$SYSTEM" == "MIUI" ]; then
