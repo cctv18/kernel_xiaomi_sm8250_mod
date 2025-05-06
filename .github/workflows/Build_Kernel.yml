@@ -438,10 +438,12 @@ jobs:
             -e SQUASHFS_XZ \
             -e SQUASHFS_ZLIB \
             -e EXFAT_FS \
+            -e UNICODE
+
+            # May cause bugs:
             #-e NLS_ASCII \
             #-e NLS_UTF8 \
-            -e UNICODE
-            
+          
           # 根据系统类型修改配置
           if [ "$SYSTEM" == "MIUI" ]; then
               echo "🔧 Apply MIUI specific configurations... (应用 MIUI 特定配置)"
