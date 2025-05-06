@@ -257,7 +257,8 @@ jobs:
       - name: 🛠️ Setup VFS Patch & additional patch for SukiSU (为 SukiSU 安装 VFS & 附加特征隐藏补丁)
         run: |
           cd "$KERNEL_SOURCE"
-          if [ "$KSU_VARIANT" == "SukiSU-Ultra" ]; then
+          #if [ "$KSU_VARIANT" == "SukiSU-Ultra" ]; then
+          if [ "$KSU_VARIANT" == "null" ]; then
             git clone https://github.com/ShirkNeko/SukiSU_patch.git
             echo "Applying VFS hooks & additional patch for SukiSU..."
             cp ./SukiSU_patch/4.19/ksu_hooks_sukisu_4.19.patch ./
@@ -437,8 +438,8 @@ jobs:
             -e SQUASHFS_XZ \
             -e SQUASHFS_ZLIB \
             -e EXFAT_FS \
-            -e NLS_ASCII \
-            -e NLS_UTF8 \
+            #-e NLS_ASCII \
+            #-e NLS_UTF8 \
             -e UNICODE
             
           # 根据系统类型修改配置
