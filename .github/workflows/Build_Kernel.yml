@@ -169,13 +169,13 @@ jobs:
             toolchain-
             
       - name: 📥 Download the compilation toolchain (下载编译工具链)
-        if: steps.cache-toolchain.outputs.cache-hit != 'true'
+        if: steps.cache-toolchain.outputs.cache-hit != 'null'
         run: |
           echo "正在下载编译工具链..."
           # 创建工具链目录
-          rm -rf "$TOOLCHAIN_DIR/clang"
-          rm -rf "$TOOLCHAIN_DIR/gcc/gcc64"
-          rm -rf "$TOOLCHAIN_DIR/gcc/gcc32"
+          #rm -rf "$TOOLCHAIN_DIR/clang"
+          #rm -rf "$TOOLCHAIN_DIR/gcc/gcc64"
+          #rm -rf "$TOOLCHAIN_DIR/gcc/gcc32"
           mkdir -p "$TOOLCHAIN_DIR/clang"
           mkdir -p "$TOOLCHAIN_DIR/gcc/gcc64"
           mkdir -p "$TOOLCHAIN_DIR/gcc/gcc32"
