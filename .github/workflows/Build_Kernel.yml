@@ -403,7 +403,6 @@ jobs:
             -e EROFS_FS_XATTR \
             -e EROFS_FS_ZIP \
             -e NFS_FS \
-            -e ROOT_NFS \
             -e NFS_FSCACHE \
             -e NFS_V2 \
             -e NFS_V3 \
