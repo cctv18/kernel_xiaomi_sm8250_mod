@@ -398,36 +398,10 @@ jobs:
             -e LRU_GEN_ENABLED \
             -e NTFS_FS \
             -e NTFS_RW \
-            -e NTFS_DEBUG \
             -e EXFAT_FS \
-            -e NFS_FS \
-            -e ROOT_NFS \
-            -e NFS_FSCACHE \
-            -e NFS_V2 \
-            -e NFS_V3 \
-            -e NFS_V3_ACL \
-            -e NFS_V4 \
-            -e NFS_V4_1 \
-            -e NFS_V4_2 \
-            -e PNFS_FILE_LAYOUT \
-            -e PNFS_BLOCK \
-            -e PNFS_FLEXFILE_LAYOUT \
-            -e CIFS \
-            -e CIFS_XATTR\
-            -e CIFS_ACL \
-            -e CIFS_UPCALL \
-            -e CIFS_DFS_UPCALL \
-            -e CIFS_FSCACHE \
-            -e CIFS_SMB_DIRECT \
             -e EROFS_FS \
             -e EROFS_FS_XATTR \
-            -e EROFS_FS_ZIP \
-            -e ISO9660_FS \
-            -e CONFIG_JOLIET \
-            -e CONFIG_ZISOFS \
-            -e UDF_FS \
-            -e NLS_ASCII \
-            -e NLS_UTF8
+            -e EROFS_FS_ZIP
           
           # 根据系统类型修改配置
           if [ "$SYSTEM" == "MIUI" ]; then
