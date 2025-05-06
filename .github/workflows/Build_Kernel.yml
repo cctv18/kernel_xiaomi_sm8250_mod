@@ -229,15 +229,15 @@ jobs:
             cd $KERNEL_SOURCE
             rm -rf utils
             git clone https://github.com/cctv18/lxc-docker-support-for-android.git utils
-            echo 'source "utils/Kconfig"' >> "Kconfig"
+            echo 'source "utils/Kconfig"' >> "$KERNEL_SOURCE/Kconfig"
             
-            echo "CONFIG_DOCKER=y" >> arch/arm64/configs/${DEVICE}_defconfig
+            echo "CONFIG_DOCKER=y" >> $KERNEL_SOURCE/arch/arm64/configs/${DEVICE}_defconfig
             
-            sed -i '/CONFIG_ANDROID_PARANOID_NETWORK/d' arch/arm64/configs/${DEVICE}_defconfig
-            echo "# CONFIG_ANDROID_PARANOID_NETWORK is not set" >> arch/arm64/configs/${DEVICE}_defconfig
+            sed -i '/CONFIG_ANDROID_PARANOID_NETWORK/d' $KERNEL_SOURCE/arch/arm64/configs/${DEVICE}_defconfig
+            echo "# CONFIG_ANDROID_PARANOID_NETWORK is not set" >> $KERNEL_SOURCE/arch/arm64/configs/${DEVICE}_defconfig
             
-            #sed -i '/CONFIG_LOCALVERSION/d' arch/arm64/configs/${DEVICE}_defconfig
-            #echo 'CONFIG_LOCALVERSION="-LXC-KernelSU-support_Pdx"' >> arch/arm64/configs/${DEVICE}_defconfig
+            #sed -i '/CONFIG_LOCALVERSION/d' $KERNEL_SOURCE/arch/arm64/configs/${DEVICE}_defconfig
+            #echo 'CONFIG_LOCALVERSION="-LXC-KernelSU-support_Pdx"' >> $KERNEL_SOURCE/arch/arm64/configs/${DEVICE}_defconfig
             
             chmod +x $KERNEL_SOURCE/utils/runcpatch.sh
             if [ -f $KERNEL_SOURCE/kernel/cgroup/cgroup.c ]; then
@@ -419,7 +419,10 @@ jobs:
             -e CIFS_UPCALL \
             -e CIFS_DFS_UPCALL \
             -e CIFS_FSCACHE \
-            -e CIFS_SMB_DIRECT
+            -e CIFS_SMB_DIRECT \
+            -e SUNRPC \
+            -e SUNRPC_GSS \
+            -e PSTORE_LAST_KMSG
           
           # 根据系统类型修改配置
           if [ "$SYSTEM" == "MIUI" ]; then
