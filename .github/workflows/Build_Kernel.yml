@@ -436,7 +436,6 @@ jobs:
             -e SQUASHFS_LZO \
             -e SQUASHFS_XZ \
             -e SQUASHFS_ZLIB \
-            -e SQUASHFS_ZSTD \
             -e EXFAT_FS \
             -e NLS_ASCII \
             -e NLS_UTF8 \
