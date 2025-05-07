@@ -409,6 +409,7 @@ jobs:
             -e EROFS_FS_XATTR \
             -e EROFS_FS_ZIP \
             -d ANDROID_PARANOID_NETWORK \
+            -e PSTORE_LAST_KMSG \
             -e VIRTUALIZATION \
             -e KVM \
             -e VHOST_NET \
