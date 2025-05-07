@@ -31,4 +31,4 @@ source "lib/Kconfig.debug"
 
 source "techpack/Kconfig"
 
-source "utils/Kconfig"
+#source "utils/Kconfig"
