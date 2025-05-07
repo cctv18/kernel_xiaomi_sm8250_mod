@@ -230,7 +230,7 @@ jobs:
             echo "🛠️ 正在为内核安装 LXC 补丁..."
             
             cd $KERNEL_SOURCE
- 
+            echo 'source "utils/Kconfig"' >> "Kconfig"
             rm -rf utils
             git clone https://github.com/cctv18/lxc-docker-support-for-android.git utils
  
