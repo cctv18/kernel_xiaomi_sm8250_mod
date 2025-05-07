@@ -408,8 +408,7 @@ jobs:
             -e EROFS_FS \
             -e EROFS_FS_XATTR \
             -e EROFS_FS_ZIP \
-            -e SUNRPC \
-            -e SUNRPC_GSS \
+            -d ANDROID_PARANOID_NETWORK \
             -e VIRTUALIZATION \
             -e KVM \
             -e VHOST_NET \
