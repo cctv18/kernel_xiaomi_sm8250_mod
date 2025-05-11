@@ -1,5 +1,5 @@
 # 关于这个仓库
-## 中文
+
 本仓库是适用于小米 SM8250 系列机型的 4.19 内核，Fork 自[Strawing老哥的仓库](https://github.com/liyafe1997/kernel_xiaomi_sm8250_mod)
 
 该内核主要基于[Lineage OS 22 xiaomi sm8250 kernel source](https://github.com/LineageOS/android_kernel_xiaomi_sm8250)，MIUI特性的代码以及部分的设备驱动抠自[UtsavBalar1231 老哥的仓库](https://github.com/UtsavBalar1231/kernel_xiaomi_sm8250)
@@ -39,11 +39,11 @@ Release里的编译好的内核成品由`android14-lineage22-mod`分支编译，
 10. PELT 半衰期锁定为 16ms 以降低功耗
 11. 开启 UFS 读写增强器，优化读写速度
 12. 添加了 LXC/Docker 补丁，支持容器运行
-13. 集成了 NTFS, NFS, SMB(CIFS), CD/DVD, EROFS, SQUASHFS, EXFAT 文件系统支持
+13. 集成了 NTFS, EXFAT, EROFS, SQUASHFS, NFS, SMB(CIFS), CD/DVD 等多种文件系统支持，可根据需要开启（部分文件系统支持存在问题，未验证/待修复）
 14. 为 SukiSU 添加了 VFS钩子/附加环境补丁
 15. 其他各种各样的优化......
 
-注意：该内核的zip包不包含`dtbo.img`，并且不会刷你的dtbo分区。推荐使用原厂的`dtbo`，或者来自第三方系统包自带的dtbo（如果原作者确认那好用的话）。因为该源码build出来的`dtbo.img`有些小问题，比如在锁屏界面上尝试熄屏时，屏幕会突然闪一下到最高亮度。如果你刷过其它第三方内核，或者遇到一些奇怪的问题，建议检查一下你的`dtbo`是否被替换过。
+注意：该内核的zip包不包含`dtbo.img`，并且不会刷你的dtbo分区。推荐使用原厂的`dtbo`，或者来自第三方系统包自带的dtbo（如果原作者确认好用的话）。因为该源码build出来的`dtbo.img`有些小问题，比如在锁屏界面上尝试熄屏时，屏幕会突然闪一下到最高亮度。如果你刷过其它第三方内核，或者遇到一些奇怪的问题，建议检查一下你的`dtbo`是否被替换过。
 
 欢迎加入内测QQ群: 459094061
 
