@@ -73,6 +73,9 @@ on:
           - 'Release'
           - 'Dev'
 
+env:
+  TZ: Asia/Shanghai
+
 jobs:
   prepare:
     runs-on: ubuntu-latest
@@ -565,7 +568,8 @@ jobs:
           BUILD_TYPE="${{ github.event.inputs.build_type }}"
           BUILD_ID="${{ env.GIT_COMMIT_ID }}"
           BUILD_DATE="${{ env.BUILD_DATE }}"
-          ZIP_NAME="${DEVICE}_${KSU}_${SYSTEM}_${BUILD_DATE}_${BUILD_ID}_${BUILD_TYPE}.zip"
+          BUILD_VER="${{ github.event.inputs.kernel_version }}"
+          ZIP_NAME="${DEVICE}_${KSU}_${SYSTEM}_${BUILD_DATE}_${BUILD_VER}.zip"
           
           echo "📦 Create AnyKernel3 package (创建 AnyKernel3 刷机包)"
           
@@ -642,22 +646,11 @@ jobs:
       uses: softprops/action-gh-release@v1
       with:
         files: /home/runner/work/kernel_xiaomi_sm8250_mod/kernel_xiaomi_sm8250_mod/release/*.zip
-        name: Kernel_（${{ env.TARGET_DEVICES }}）_${{ github.event.inputs.kernelsu_variant }}_${{ github.event.inputs.compiled_system }}_${{ env.RELEASE_DATE }}_${{ env.GIT_COMMIT_ID }}_${{ github.event.inputs.build_type }}
-        tag_name: Kernel_（${{ env.TARGET_DEVICES }}）_${{ github.event.inputs.kernelsu_variant }}_${{ github.event.inputs.compiled_system }}_${{ env.RELEASE_DATE }}_${{ env.GIT_COMMIT_ID }}
+        name: ${{ github.event.inputs.kernel_version }}
+        tag_name: ${{ github.event.inputs.kernel_version }}
         body: |
           ## 📱kernel build information | 内核构建信息
       
-          ### 🌐 英文 | English
-          - **Target Device:** ${{ env.TARGET_DEVICES }}
-          - **Compiled System:** ${{ github.event.inputs.compiled_system }}
-          - **KernelSU Variant:** ${{ github.event.inputs.kernelsu_variant }}
-          - **KPM Support:** ${{ github.event.inputs.kpm_enable }}
-          - **LXC Support:** ${{ github.event.inputs.lxc_enable }}
-          - **Build Type:** ${{ github.event.inputs.build_type }}
-          - **Build Date:** ${{ env.RELEASE_DATE }}
-          - **Commit ID:** ${{ env.GIT_COMMIT_ID }}
-      
-          ### 🇨🇳 中文 | Chinese
           - **目标机型:** ${{ env.TARGET_DEVICES }}
           - **适用系统:** ${{ github.event.inputs.compiled_system }}
           - **KernelSU变体:** ${{ github.event.inputs.kernelsu_variant }}
@@ -666,11 +659,14 @@ jobs:
           - **构建类型:** ${{ github.event.inputs.build_type }}
           - **构建日期:** ${{ env.RELEASE_DATE }}
           - **提交ID:** ${{ env.GIT_COMMIT_ID }}
+          - **完整发行版本号:** Kernel_(${{ env.TARGET_DEVICES }})_${{ github.event.inputs.kernelsu_variant }}_${{ github.event.inputs.compiled_system }}_${{ env.RELEASE_DATE }}_${{ github.event.inputs.kernel_version }}_${{ env.GIT_COMMIT_ID }}_${{ github.event.inputs.build_type }}
+
+          ### ⏫️ 更新日志 | Update Log
+          - 1.（占位符，待填写）
       
-          ### 📋 安装说明 | Installation Guide
-          1. 下载对应机型的刷机包
-          2. 进入Recovery模式
-          3. 通过Recovery刷入刷机包
-          4. 重启设备
+          ### 📋 安装方法 | Installation Guide
+          1. 若你的手机已经安装了第三方Recovery（如TWRP)，可下载对应机型的AnyKernel刷机包后进入Recovery模式，通过Recovery刷入刷机包后重启设备
+          2. 若你的手机之前已有 root 权限，可在手机上安装KernelFlasher，在KernelFlasher中刷入AnyKernel刷机包并重启
+          3. 若你之前已刷入SukiSU Ultra内核，且SukiSU Ultra管理器已更新至最新版本，可在SukiSU Ultra管理器中直接刷入AnyKernel刷机包并重启
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
