@@ -649,7 +649,7 @@ jobs:
         name: ${{ github.event.inputs.kernel_version }}
         tag_name: ${{ github.event.inputs.kernel_version }}
         body: |
-          ## 📱kernel build information | 内核构建信息
+          ### 📱kernel build information | 内核构建信息
       
           - **目标机型:** ${{ env.TARGET_DEVICES }}
           - **适用系统:** ${{ github.event.inputs.compiled_system }}
