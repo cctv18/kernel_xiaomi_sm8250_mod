@@ -13,7 +13,6 @@
 #define BTRFS_SEND_STREAM_VERSION 1
 
 #define BTRFS_SEND_BUF_SIZE SZ_64K
-#define BTRFS_SEND_READ_SIZE (48 * SZ_1K)
 
 enum btrfs_tlv_type {
 	BTRFS_TLV_U8,
@@ -49,6 +48,7 @@ struct btrfs_tlv_header {
 enum btrfs_send_cmd {
 	BTRFS_SEND_C_UNSPEC,
 
+	/* Version 1 */
 	BTRFS_SEND_C_SUBVOL,
 	BTRFS_SEND_C_SNAPSHOT,
 
@@ -77,6 +77,12 @@ enum btrfs_send_cmd {
 
 	BTRFS_SEND_C_END,
 	BTRFS_SEND_C_UPDATE_EXTENT,
+	__BTRFS_SEND_C_MAX_V1,
+
+	/* Version 2 */
+	__BTRFS_SEND_C_MAX_V2,
+
+	/* End */
 	__BTRFS_SEND_C_MAX,
 };
 #define BTRFS_SEND_C_MAX (__BTRFS_SEND_C_MAX - 1)
