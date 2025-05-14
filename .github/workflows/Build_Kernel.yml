@@ -412,6 +412,7 @@ jobs:
             -e EROFS_FS_XATTR \
             -e EROFS_FS_ZIP \
             -d ANDROID_PARANOID_NETWORK \
+            -e BTRFS_FS \
             -e PSTORE_LAST_KMSG
 
           # 根据系统类型修改配置
