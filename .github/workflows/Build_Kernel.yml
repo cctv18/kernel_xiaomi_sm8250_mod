@@ -446,6 +446,11 @@ jobs:
                   -e MI_RECLAIM \
                   -e RTMM
           fi
+
+          if [ "$LXC_ENABLE" == "enable" ]; then
+              scripts/config --file out/.config \
+                  -d PERF_HUMANTASK
+          fi
             
           # 根据 KernelSU 变体修改配置
           if [ "$KSU" == "SukiSU-Ultra" ] || [ "$KSU" == "RKSU" ]; then
