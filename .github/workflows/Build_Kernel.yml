@@ -158,7 +158,7 @@ jobs:
       - name: 📥 Cloning kernel source code （克隆内核源码）
         run: |
           echo "正在克隆内核源码..."
-          git clone https://github.com/cctv18/kernel_xiaomi_sm8250_mod.git --depth=1 $KERNEL_SOURCE
+          git clone https://github.com/liyafe1997/kernel_xiaomi_sm8250_mod.git --depth=1 $KERNEL_SOURCE
           echo "✅ Kernel source code cloning complete (内核源码克隆完成)"
 
       - name: 📥 Caching toolchain (缓存工具链)
