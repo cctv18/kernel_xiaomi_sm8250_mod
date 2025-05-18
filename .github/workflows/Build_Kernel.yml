@@ -11,7 +11,7 @@ on:
         required: true
         type: choice
         options:
-          - 'lmi'
+          - 'umi'
           - 'cmi'
           - 'cas'
           - 'thyme'
@@ -21,7 +21,7 @@ on:
           - 'enuma'
           - 'alioth'
           - 'apollo'
-          - 'umi'
+          - 'lmi'
           - 'psyche'
           - 'pipa'
           - 'all'
@@ -172,13 +172,10 @@ jobs:
             toolchain-
             
       - name: 📥 Download the compilation toolchain (下载编译工具链)
-        if: steps.cache-toolchain.outputs.cache-hit == 'null'
+        if: steps.cache-toolchain.outputs.cache-hit != 'true'
         run: |
           echo "正在下载编译工具链..."
           # 创建工具链目录
-          #rm -rf "$TOOLCHAIN_DIR/clang"
-          #rm -rf "$TOOLCHAIN_DIR/gcc/gcc64"
-          #rm -rf "$TOOLCHAIN_DIR/gcc/gcc32"
           mkdir -p "$TOOLCHAIN_DIR/clang"
           mkdir -p "$TOOLCHAIN_DIR/gcc/gcc64"
           mkdir -p "$TOOLCHAIN_DIR/gcc/gcc32"
@@ -262,7 +259,7 @@ jobs:
           else 
             echo "ℹ️ LXC is not enabled. (LXC 未启用)"
           fi
-
+          
       - name: 🛠️ Setup VFS Patch & additional patch for SukiSU (为 SukiSU 安装 VFS & 附加特征隐藏补丁)
         run: |
           cd "$KERNEL_SOURCE"
@@ -404,16 +401,8 @@ jobs:
             --set-val BIG_CPU_MASK 112 \
             --set-val PRIME_CPU_MASK 128 \
             -e LRU_GEN \
-            -e LRU_GEN_ENABLED \
-            -e NTFS_FS \
-            -e NTFS_RW \
-            -e EXFAT_FS \
-            -e EROFS_FS \
-            -e EROFS_FS_XATTR \
-            -e EROFS_FS_ZIP \
-            -d ANDROID_PARANOID_NETWORK \
-            -e PSTORE_LAST_KMSG
-
+            -e LRU_GEN_ENABLED
+            
           # 根据系统类型修改配置
           if [ "$SYSTEM" == "MIUI" ]; then
               echo "🔧 Apply MIUI specific configurations... (应用 MIUI 特定配置)"
@@ -445,11 +434,6 @@ jobs:
                   -e BOOTUP_RECLAIM \
                   -e MI_RECLAIM \
                   -e RTMM
-          fi
-
-          if [ "$LXC_ENABLE" == "enable" ]; then
-              scripts/config --file out/.config \
-                  -d PERF_HUMANTASK
           fi
             
           # 根据 KernelSU 变体修改配置
@@ -573,8 +557,7 @@ jobs:
           BUILD_TYPE="${{ github.event.inputs.build_type }}"
           BUILD_ID="${{ env.GIT_COMMIT_ID }}"
           BUILD_DATE="${{ env.BUILD_DATE }}"
-          BUILD_VER="${{ github.event.inputs.kernel_version }}"
-          ZIP_NAME="${DEVICE}_${KSU}_${SYSTEM}_${BUILD_DATE}_${BUILD_VER}.zip"
+          ZIP_NAME="${DEVICE}_${KSU}_${SYSTEM}_${BUILD_DATE}_${BUILD_ID}_${BUILD_TYPE}.zip"
           
           echo "📦 Create AnyKernel3 package (创建 AnyKernel3 刷机包)"
           
@@ -651,10 +634,10 @@ jobs:
       uses: softprops/action-gh-release@v1
       with:
         files: /home/runner/work/kernel_xiaomi_sm8250_mod/kernel_xiaomi_sm8250_mod/release/*.zip
-        name: ${{ github.event.inputs.kernel_version }}
-        tag_name: ${{ github.event.inputs.kernel_version }}
+        name: Kernel_（${{ env.TARGET_DEVICES }}）_${{ github.event.inputs.kernelsu_variant }}_${{ github.event.inputs.compiled_system }}_${{ env.RELEASE_DATE }}_${{ env.GIT_COMMIT_ID }}_${{ github.event.inputs.build_type }}
+        tag_name: Kernel_（${{ env.TARGET_DEVICES }}）_${{ github.event.inputs.kernelsu_variant }}_${{ github.event.inputs.compiled_system }}_${{ env.RELEASE_DATE }}_${{ env.GIT_COMMIT_ID }}
         body: |
-          ### 📱kernel build information | 内核构建信息
+          ## 📱kernel build information | 内核构建信息
       
           - **目标机型:** ${{ env.TARGET_DEVICES }}
           - **适用系统:** ${{ github.event.inputs.compiled_system }}
@@ -675,3 +658,4 @@ jobs:
           3. 若你之前已刷入SukiSU Ultra内核，且SukiSU Ultra管理器已更新至最新版本，可在SukiSU Ultra管理器中直接刷入AnyKernel刷机包并重启
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        
