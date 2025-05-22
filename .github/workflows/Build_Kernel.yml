@@ -1,4 +1,4 @@
-name: Build Kernel
+name: Build Kernel (New codebase)
 permissions:
   contents: write
   actions: write
