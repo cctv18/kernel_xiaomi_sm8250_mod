@@ -1,7 +1,7 @@
 [submodule "KernelSU"]
 	path = KernelSU
-	url = https://github.com/ShirkNeko/KernelSU
-	branch = susfs-dev
+	url = https://github.com/rsuntk/KernelSU
+	branch = susfs-v1.5.5
 [submodule "toolchain/gcc/gcc64"]
 	path = toolchain/gcc/gcc64
 	url = https://github.com/LineageOS/android_prebuilts_gcc_linux-x86_aarch64_aarch64-linux-android-4.9.git
