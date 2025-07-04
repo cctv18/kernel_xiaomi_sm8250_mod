@@ -244,16 +244,16 @@ jobs:
           #4.19内核钩子补丁：
           git clone https://github.com/ShirkNeko/SukiSU_patch.git
           cp ./SukiSU_patch/4.19/ksu_hooks_sukisu_4.19.patch ./
-          patch -p1 -F 3 < ksu_hooks_sukisu_4.19.patch
+          patch -p1 -F 3 < ksu_hooks_sukisu_4.19.patch || true
           #特征隐藏补丁：
           cp ./SukiSU_patch/69_hide_stuff.patch ./
-          patch -p1 -F 3 < 69_hide_stuff.patch
+          patch -p1 -F 3 < 69_hide_stuff.patch || true
           #SUSFS for SukiSU 补丁：
           git clone https://github.com/ShirkNeko/susfs4ksu.git -b kernel-4.19
           cp ./susfs4ksu/kernel_patches/50_add_susfs_in_kernel-4.19.patch ./
           cp ./susfs4ksu/kernel_patches/fs/* ./fs/
           cp ./susfs4ksu/kernel_patches/include/linux/* ./include/linux/
-          patch -p1 -F 3 < 50_add_susfs_in_kernel-4.19.patch
+          patch -p1 -F 3 < 50_add_susfs_in_kernel-4.19.patch || true
           echo "补丁完成！"
           
       - name: 🔨 Build the kernel (构建内核)
