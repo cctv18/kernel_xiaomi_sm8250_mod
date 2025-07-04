@@ -194,7 +194,7 @@ jobs:
           
           KSU_VARIANT="SukiSU-Ultra"
           
-          echo "⚙️ KernelSU Version: $KSU_VARIANT (KernelSU 版本: $KSU_VARIANT)"
+          echo "⚙️  Version: $KSU_VARIANT ( 版本: $KSU_VARIANT)"
           
           curl -LSs "https://raw.githubusercontent.com/ShirkNeko/SukiSU-Ultra/susfs-main/kernel/setup.sh" | bash -s susfs-main
           
@@ -217,7 +217,7 @@ jobs:
             echo "# CONFIG_ANDROID_PARANOID_NETWORK is not set" >> arch/arm64/configs/${DEVICE}_defconfig
  
             #sed -i '/CONFIG_LOCALVERSION/d' arch/arm64/configs/${DEVICE}_defconfig
-            #echo 'CONFIG_LOCALVERSION="-LXC-KernelSU-support_Pdx"' >> arch/arm64/configs/${DEVICE}_defconfig
+            #echo 'CONFIG_LOCALVERSION="-LXC--support_Pdx"' >> arch/arm64/configs/${DEVICE}_defconfig
  
             chmod +x $KERNEL_SOURCE/utils/runcpatch.sh
  
@@ -255,8 +255,8 @@ jobs:
           patch -p1 -F 3 < ksu_hooks_sukisu_4.19.patch || true
           
           #特征隐藏补丁：
-          #cp ./SukiSU_patch/69_hide_stuff.patch ./
-          #patch -p1 -F 3 < 69_hide_stuff.patch || true
+          cp ./SukiSU_patch/69_hide_stuff.patch ./
+          patch -p1 -F 3 < 69_hide_stuff.patch || true
           
           echo "补丁完成！"
           
