@@ -243,8 +243,8 @@ jobs:
           echo "Applying patches for SukiSU..."
           #内核钩子补丁：
           git clone https://github.com/ShirkNeko/SukiSU_patch.git
-          cp ./SukiSU_patch/hooks/syscall_hooks.patch ./
-          patch -p1 -F 3 < syscall_hooks.patch || true
+          cp ./SukiSU_patch/4.19/ksu_hooks_sukisu_4.19.patch ./
+          patch -p1 -F 3 < ksu_hooks_sukisu_4.19.patch || true
           #特征隐藏补丁：
           cp ./SukiSU_patch/69_hide_stuff.patch ./
           patch -p1 -F 3 < 69_hide_stuff.patch || true
