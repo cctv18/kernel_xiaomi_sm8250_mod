@@ -33,24 +33,6 @@ on:
         options:
           - 'MIUI'
           - 'AOSP'
-      kernelsu_variant:
-        description: 'KernelSU variants (KernelSU 版本)'
-        required: true
-        type: choice
-        default: 'SukiSU-Ultra'
-        options:
-          - 'SukiSU-Ultra'
-          - 'RKSU'
-          - 'KernelSU'
-          - 'None'
-      kpm_enable:
-        description: 'Is KPM support enabled? (是否启用 KPM 支持?)'
-        required: true
-        type: choice
-        default: 'enable'
-        options:
-          - 'enable'
-          - 'disable'
       lxc_enable:
         description: 'Is LXC support enabled? (是否启用 LXC 支持?)'
         required: true
@@ -75,6 +57,7 @@ on:
 
 env:
   TZ: Asia/Shanghai
+  kernelsu_variant: SukiSU-Ultra
 
 jobs:
   prepare:
@@ -113,7 +96,6 @@ jobs:
       - name: 📢 Build Information (构建信息)
         run: |
           echo "设备: ${DEVICE} | 系统: ${{ github.event.inputs.compiled_system }}"
-          echo "KernelSU变体: ${{ github.event.inputs.kernelsu_variant }} | KPM: ${{ github.event.inputs.kpm_enable }}"
           echo "构建类型: ${{ github.event.inputs.build_type }}"
 
       - name: 🚀 Maximize build space (最大化构建空间)
@@ -210,21 +192,13 @@ jobs:
         run: |
           cd "$KERNEL_SOURCE"
           
-          KSU_VARIANT="${{ github.event.inputs.kernelsu_variant }}"
+          KSU_VARIANT="SukiSU-Ultra"
           
-          echo "⚙️ Configure KernelSU Variants: $KSU_VARIANT (配置 KernelSU 变体: $KSU_VARIANT)"
+          echo "⚙️ KernelSU Version: $KSU_VARIANT (KernelSU 版本: $KSU_VARIANT)"
           
-          if [ "$KSU_VARIANT" == "SukiSU-Ultra" ]; then
-            curl -LSs "https://raw.githubusercontent.com/ShirkNeko/SukiSU-Ultra/susfs-main/kernel/setup.sh" | bash -s susfs-main
-          elif [ "$KSU_VARIANT" == "RKSU" ]; then
-            curl -LSs "https://raw.githubusercontent.com/rsuntk/KernelSU/susfs-v1.5.5/kernel/setup.sh" | bash -s susfs-v1.5.5
-          elif [ "$KSU_VARIANT" == "KernelSU" ]; then
-            curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -s v0.9.5
-          else
-            echo "KernelSU Disabled (KernelSU 已禁用)"
-          fi
+          curl -LSs "https://raw.githubusercontent.com/ShirkNeko/SukiSU-Ultra/susfs-main/kernel/setup.sh" | bash -s susfs-main
           
-          echo "✅ KernelSU configuration complete (KernelSU 配置完成)"
+          echo "✅ $KSU_VARIANT configuration complete ($KSU_VARIANT 配置完成)"
 
       - name: 🛠️ Setup LXC (安装 LXC 补丁)
         run: |
@@ -266,22 +240,21 @@ jobs:
       - name: 🛠️ Setup patches for SukiSU (为 SukiSU 安装补丁)
         run: |
           cd "$KERNEL_SOURCE"
-          if [ "$KSU_VARIANT" == "SukiSU-Ultra" ]; then
-            echo "Applying patches for SukiSU..."
-            #4.19内核钩子补丁：
-            git clone https://github.com/ShirkNeko/SukiSU_patch.git
-            cp ./SukiSU_patch/4.19/ksu_hooks_sukisu_4.19.patch ./
-            patch -p1 -F 3 < ksu_hooks_sukisu_4.19.patch
-            #特征隐藏补丁：
-            cp ./SukiSU_patch/69_hide_stuff.patch ./
-            patch -p1 -F 3 < 69_hide_stuff.patch
-            #SUSFS for SukiSU 补丁：
-            git clone https://github.com/ShirkNeko/susfs4ksu.git -b kernel-4.19
-            cp ./susfs4ksu/kernel_patches/50_add_susfs_in_kernel-4.19.patch ./
-            cp ./susfs4ksu/kernel_patches/fs/* ./fs/
-            cp ./susfs4ksu/kernel_patches/include/linux/* ./include/linux/
-            patch -p1 -F 3 < 50_add_susfs_in_kernel-4.19.patch
-          fi
+          echo "Applying patches for SukiSU..."
+          #4.19内核钩子补丁：
+          git clone https://github.com/ShirkNeko/SukiSU_patch.git
+          cp ./SukiSU_patch/4.19/ksu_hooks_sukisu_4.19.patch ./
+          patch -p1 -F 3 < ksu_hooks_sukisu_4.19.patch
+          #特征隐藏补丁：
+          cp ./SukiSU_patch/69_hide_stuff.patch ./
+          patch -p1 -F 3 < 69_hide_stuff.patch
+          #SUSFS for SukiSU 补丁：
+          git clone https://github.com/ShirkNeko/susfs4ksu.git -b kernel-4.19
+          cp ./susfs4ksu/kernel_patches/50_add_susfs_in_kernel-4.19.patch ./
+          cp ./susfs4ksu/kernel_patches/fs/* ./fs/
+          cp ./susfs4ksu/kernel_patches/include/linux/* ./include/linux/
+          patch -p1 -F 3 < 50_add_susfs_in_kernel-4.19.patch
+          echo "补丁完成！"
           
       - name: 🔨 Build the kernel (构建内核)
         run: |
@@ -302,8 +275,8 @@ jobs:
           
           # 获取参数
           SYSTEM="${{ github.event.inputs.compiled_system }}"
-          KSU="${{ github.event.inputs.kernelsu_variant }}"
-          KPM="${{ github.event.inputs.kpm_enable }}"
+          #KSU="${{ github.event.inputs.kernelsu_variant }}"
+          #KPM="${{ github.event.inputs.kpm_enable }}"
           VERSION="${{ github.event.inputs.kernel_version }}"
           
           # 生成设备配置
@@ -460,41 +433,35 @@ jobs:
           #        -d PERF_HUMANTASK
           #fi
             
-          # 根据 KernelSU 变体修改配置
-          if [ "$KSU" == "SukiSU-Ultra" ] || [ "$KSU" == "RKSU" ]; then
-              echo "🔧 Applying SukiSU-Ultra & RKSU Configuration... (应用 SukiSU-Ultra & RKSU 配置)"
-              scripts/config --file out/.config \
-                  -e KSU \
-                  -e KPM \
-                  -e KSU_MANUAL_HOOK \
-                  -e KSU_SUSFS \
-                  -e KSU_SUSFS_HAS_MAGIC_MOUNT \
-                  -e KSU_SUSFS_SUS_PATH \
-                  -e KSU_SUSFS_SUS_MOUNT \
-                  -e KSU_SUSFS_AUTO_ADD_SUS_KSU_DEFAULT_MOUNT \
-                  -e KSU_SUSFS_AUTO_ADD_SUS_BIND_MOUNT \
-                  -e KSU_SUSFS_SUS_KSTAT \
-                  -d KSU_SUSFS_SUS_OVERLAYFS \
-                  -e KSU_SUSFS_TRY_UMOUNT \
-                  -e KSU_SUSFS_AUTO_ADD_TRY_UMOUNT_FOR_BIND_MOUNT \
-                  -e KSU_SUSFS_SPOOF_UNAME \
-                  -e KSU_SUSFS_ENABLE_LOG \
-                  -e KSU_SUSFS_HIDE_KSU_SUSFS_SYMBOLS \
-                  -e KSU_SUSFS_SPOOF_CMDLINE_OR_BOOTCONFIG \
-                  -e KSU_SUSFS_OPEN_REDIRECT \
-                  -d KSU_SUSFS_SUS_SU
-          elif [ "$KSU" == "KernelSU" ]; then
-              echo "🔧 Applying KernelSU Configuration... (应用 KernelSU 配置)"
-              scripts/config --file out/.config \
-                  -e KSU
-          fi
+          # 添加 KSU 配置
+          echo "🔧 Applying SukiSU-Ultra Configuration... (应用 SukiSU-Ultra 配置)"
+          scripts/config --file out/.config \
+              -e KSU \
+              -e KPM \
+              -e KSU_MANUAL_HOOK \
+              -e KSU_SUSFS \
+              -e KSU_SUSFS_HAS_MAGIC_MOUNT \
+              -e KSU_SUSFS_SUS_PATH \
+              -e KSU_SUSFS_SUS_MOUNT \
+              -e KSU_SUSFS_AUTO_ADD_SUS_KSU_DEFAULT_MOUNT \
+              -e KSU_SUSFS_AUTO_ADD_SUS_BIND_MOUNT \
+              -e KSU_SUSFS_SUS_KSTAT \
+              -d KSU_SUSFS_SUS_OVERLAYFS \
+              -e KSU_SUSFS_TRY_UMOUNT \
+              -e KSU_SUSFS_AUTO_ADD_TRY_UMOUNT_FOR_BIND_MOUNT \
+              -e KSU_SUSFS_SPOOF_UNAME \
+              -e KSU_SUSFS_ENABLE_LOG \
+              -e KSU_SUSFS_HIDE_KSU_SUSFS_SYMBOLS \
+              -e KSU_SUSFS_SPOOF_CMDLINE_OR_BOOTCONFIG \
+              -e KSU_SUSFS_OPEN_REDIRECT \
+              -d KSU_SUSFS_SUS_SU
             
           # 判断KPM是否启用并开启相关配置
-          if [ "$KSU" == "SukiSU-Ultra" ] && [ "$KPM" == "enable" ]; then
-              echo "🔧 Enabling KPM Configuration... (开启 KPM 配置)"
-              scripts/config --file out/.config \
-                  -e KPM
-          fi
+          #if [ "$KSU" == "SukiSU-Ultra" ] && [ "$KPM" == "enable" ]; then
+          #    echo "🔧 Enabling KPM Configuration... (开启 KPM 配置)"
+          #    scripts/config --file out/.config \
+          #        -e KPM
+          #fi
             
           # 修改内核版本号
           if [ ! -z "$VERSION" ]; then
@@ -542,10 +509,10 @@ jobs:
 
       - name: 🛠️ KPM Patching Image Files (KPM 修补 Image 文件)
         run: |
-          KSU_VARIANT="${{ github.event.inputs.kernelsu_variant }}"
-          KPM_ENABLE="${{ github.event.inputs.kpm_enable }}"
+          #KSU_VARIANT="${{ github.event.inputs.kernelsu_variant }}"
+          #KPM_ENABLE="${{ github.event.inputs.kpm_enable }}"
           
-          if [ "$KSU_VARIANT" == "SukiSU-Ultra" ] && [ "$KPM_ENABLE" == "enable" ]; then
+          #if [ "$KSU_VARIANT" == "SukiSU-Ultra" ] && [ "$KPM_ENABLE" == "enable" ]; then
             echo "🛠️ 正在修补 Image 文件..."
             cd "$KERNEL_SOURCE/out/arch/arm64/boot"
             curl -LSs "https://raw.githubusercontent.com/ShirkNeko/SukiSU_patch/refs/heads/main/kpm/patch_linux" -o patch
@@ -558,9 +525,9 @@ jobs:
             else
               echo "❌ KPM Patch Failed, Use Original Image (KPM 修补失败，使用原始 Image)"
             fi
-          else 
-            echo "ℹ️ KPM is not enabled or KernelSU variants do not support KPM. (KPM 未启用或 KernelSU 变体不支持 KPM)"
-          fi
+          #else 
+          #  echo "ℹ️ KPM is not enabled or KernelSU variants do not support KPM. (KPM 未启用或 KernelSU 变体不支持 KPM)"
+          #fi
 
       - name: 📝 Setting Version Variables (设置版本变量)
         run: |
@@ -578,7 +545,7 @@ jobs:
         run: |
           # 定义变量
           SYSTEM="${{ github.event.inputs.compiled_system }}"
-          KSU="${{ github.event.inputs.kernelsu_variant }}"
+          KSU="SukiSU-Ultra"
           BUILD_TYPE="${{ github.event.inputs.build_type }}"
           BUILD_ID="${{ env.GIT_COMMIT_ID }}"
           BUILD_DATE="${{ env.BUILD_DATE }}"
@@ -592,21 +559,18 @@ jobs:
           cd "$WORKDIR/ak3_out"
           git clone https://github.com/liyafe1997/AnyKernel3.git --depth=1
           cd AnyKernel3
-          
           # 删除不需要的文件
           rm -rf .git .github README.md
-          
           # 复制内核镜像
           cp "$KERNEL_SOURCE/out/arch/arm64/boot/Image" ./
-          
           # 打包
           echo "📦 Flashing package being created (正在创建刷机包): $ZIP_NAME"
-          zip -r "$ZIP_NAME" .
+          zip -r "$ZIP_NAME" ./
           
           if [ -f "$ZIP_NAME" ]; then
             echo "✅ Flip package created successfully (刷机包创建成功): $ZIP_NAME"
             ls -lh "$ZIP_NAME"
-            mv "$ZIP_NAME" ..
+            mv "$ZIP_NAME" ../
           else
             echo "❌ Brush package creation failed (刷机包创建失败)"
             exit 1
@@ -667,8 +631,8 @@ jobs:
       
           - **目标机型:** ${{ env.TARGET_DEVICES }}
           - **适用系统:** ${{ github.event.inputs.compiled_system }}
-          - **KernelSU变体:** ${{ github.event.inputs.kernelsu_variant }}
-          - **KPM支持:** ${{ github.event.inputs.kpm_enable }}
+          - **KernelSU版本:** SukiSU-Ultra
+          - **KPM支持:** True
           - **LXC支持:** ${{ github.event.inputs.lxc_enable }}
           - **构建类型:** ${{ github.event.inputs.build_type }}
           - **构建日期:** ${{ env.RELEASE_DATE }}
