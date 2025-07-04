@@ -215,7 +215,7 @@ jobs:
           echo "⚙️ Configure KernelSU Variants: $KSU_VARIANT (配置 KernelSU 变体: $KSU_VARIANT)"
           
           if [ "$KSU_VARIANT" == "SukiSU-Ultra" ]; then
-            curl -LSs "https://raw.githubusercontent.com/ShirkNeko/SukiSU-Ultra/susfs-dev/kernel/setup.sh" | bash -s susfs-dev
+            curl -LSs "https://raw.githubusercontent.com/ShirkNeko/SukiSU-Ultra/susfs-dev/kernel/setup.sh" | bash -s susfs-main
           elif [ "$KSU_VARIANT" == "RKSU" ]; then
             curl -LSs "https://raw.githubusercontent.com/rsuntk/KernelSU/susfs-v1.5.5/kernel/setup.sh" | bash -s susfs-v1.5.5
           elif [ "$KSU_VARIANT" == "KernelSU" ]; then
@@ -447,10 +447,10 @@ jobs:
                   -e RTMM
           fi
 
-          if [ "$LXC_ENABLE" == "enable" ]; then
-              scripts/config --file out/.config \
-                  -d PERF_HUMANTASK
-          fi
+          #if [ "$LXC_ENABLE" == "enable" ]; then
+          #    scripts/config --file out/.config \
+          #        -d PERF_HUMANTASK
+          #fi
             
           # 根据 KernelSU 变体修改配置
           if [ "$KSU" == "SukiSU-Ultra" ] || [ "$KSU" == "RKSU" ]; then
