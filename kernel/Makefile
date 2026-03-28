@@ -155,8 +155,6 @@ else ifeq ($(CONFIG_MACH_XIAOMI_UMI),y)
 $(obj)/config_data.gz: arch/arm64/configs/umi_stock-defconfig FORCE
 else ifeq ($(CONFIG_MACH_XIAOMI_PIPA),y)
 $(obj)/config_data.gz: arch/arm64/configs/pipa_stock-defconfig FORCE
-else ifeq ($(CONFIG_MACH_XIAOMI_DAGU),y)
-$(obj)/config_data.gz: arch/arm64/configs/dagu_stock-defconfig FORCE
 else
 $(obj)/config_data.gz: $(KCONFIG_CONFIG) FORCE
 endif
