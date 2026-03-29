@@ -131,27 +131,27 @@ targets += config_data.gz
 
 ifeq ($(CONFIG_XIAOMI_MIUI),y)
 # Build for MIUI
-ifeq ($(CONFIG_MACH_XIAOMI_ALIOTH),y)
+ifeq ($(CONFIG_BOARD_ALIOTH),y)
 $(obj)/config_data.gz: arch/arm64/configs/alioth_stock-defconfig FORCE
-else ifeq ($(CONFIG_MACH_XIAOMI_APOLLO),y)
+else ifeq ($(CONFIG_BOARD_APOLLO),y)
 $(obj)/config_data.gz: arch/arm64/configs/apollo_stock-defconfig FORCE
-else ifeq ($(CONFIG_MACH_XIAOMI_CAS),y)
+else ifeq ($(CONFIG_BOARD_CAS),y)
 $(obj)/config_data.gz: arch/arm64/configs/cas_stock-defconfig FORCE
-else ifeq ($(CONFIG_MACH_XIAOMI_CMI),y)
+else ifeq ($(CONFIG_BOARD_CMI),y)
 $(obj)/config_data.gz: arch/arm64/configs/cmi_stock-defconfig FORCE
-else ifeq ($(CONFIG_MACH_XIAOMI_ELISH),y)
+else ifeq ($(CONFIG_BOARD_ELISH),y)
 $(obj)/config_data.gz: arch/arm64/configs/elish_stock-defconfig FORCE
-else ifeq ($(CONFIG_MACH_XIAOMI_ENUMA),y)
+else ifeq ($(CONFIG_BOARD_ENUMA),y)
 $(obj)/config_data.gz: arch/arm64/configs/enuma_stock-defconfig FORCE
-else ifeq ($(CONFIG_MACH_XIAOMI_LMI),y)
+else ifeq ($(CONFIG_BOARD_LMI),y)
 $(obj)/config_data.gz: arch/arm64/configs/lmi_stock-defconfig FORCE
-else ifeq ($(CONFIG_MACH_XIAOMI_MUNCH),y)
+else ifeq ($(CONFIG_BOARD_MUNCH),y)
 $(obj)/config_data.gz: arch/arm64/configs/munch_stock-defconfig FORCE
-else ifeq ($(CONFIG_MACH_XIAOMI_PSYCHE),y)
+else ifeq ($(CONFIG_BOARD_PSYCHE),y)
 $(obj)/config_data.gz: arch/arm64/configs/psyche_stock-defconfig FORCE
-else ifeq ($(CONFIG_MACH_XIAOMI_THYME),y)
+else ifeq ($(CONFIG_BOARD_THYME),y)
 $(obj)/config_data.gz: arch/arm64/configs/thyme_stock-defconfig FORCE
-else ifeq ($(CONFIG_MACH_XIAOMI_UMI),y)
+else ifeq ($(CONFIG_BOARD_UMI),y)
 $(obj)/config_data.gz: arch/arm64/configs/umi_stock-defconfig FORCE
 else
 $(obj)/config_data.gz: $(KCONFIG_CONFIG) FORCE
@@ -160,19 +160,19 @@ else
 
 # Build for AOSP
 
-ifeq ($(CONFIG_MACH_XIAOMI_ALIOTH),y)
+ifeq ($(CONFIG_BOARD_ALIOTH),y)
 $(obj)/config_data.gz: arch/arm64/configs/AOSP_defconfig/alioth_stock-defconfig FORCE
-else ifeq ($(CONFIG_MACH_XIAOMI_APOLLO),y)
+else ifeq ($(CONFIG_BOARD_APOLLO),y)
 $(obj)/config_data.gz: arch/arm64/configs/AOSP_defconfig/apollo_stock-defconfig FORCE
-else ifeq ($(CONFIG_MACH_XIAOMI_CMI),y)
+else ifeq ($(CONFIG_BOARD_CMI),y)
 $(obj)/config_data.gz: arch/arm64/configs/AOSP_defconfig/cmi_stock-defconfig FORCE
-else ifeq ($(CONFIG_MACH_XIAOMI_LMI),y)
+else ifeq ($(CONFIG_BOARD_LMI),y)
 $(obj)/config_data.gz: arch/arm64/configs/AOSP_defconfig/lmi_stock-defconfig FORCE
-else ifeq ($(CONFIG_MACH_XIAOMI_MUNCH),y)
+else ifeq ($(CONFIG_BOARD_MUNCH),y)
 $(obj)/config_data.gz: arch/arm64/configs/AOSP_defconfig/munch_stock-defconfig FORCE
-else ifeq ($(CONFIG_MACH_XIAOMI_PSYCHE),y)
+else ifeq ($(CONFIG_BOARD_PSYCHE),y)
 $(obj)/config_data.gz: arch/arm64/configs/AOSP_defconfig/psyche_stock-defconfig FORCE
-else ifeq ($(CONFIG_MACH_XIAOMI_UMI),y)
+else ifeq ($(CONFIG_BOARD_UMI),y)
 $(obj)/config_data.gz: arch/arm64/configs/AOSP_defconfig/umi_stock-defconfig FORCE
 else
 $(obj)/config_data.gz: $(KCONFIG_CONFIG) FORCE
